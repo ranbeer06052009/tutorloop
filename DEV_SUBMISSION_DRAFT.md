@@ -58,14 +58,13 @@ Experience the live interactive build hosted on Render:
 5. **Student Roster Manager:** Full directory storing custom hourly rates, parent phone numbers, preferred communication channels, and learning notes in local SQLite.
 6. **Local AI Engine Diagnostics:** Live ping monitor verifying local Ollama connectivity, model status, and terminal cheat sheet (`ollama run gemma2:2b`).
 
----
+## Code
 
-## 💻 Source Code
+The complete source code is published on GitHub under the MIT License:
 
-The complete source code is published on GitHub under the MIT License:  
-👉 **GitHub Repository:** [https://github.com/ranbeer06052009/tutorloop](https://github.com/ranbeer06052009/tutorloop)
+{% github ranbeer06052009/tutorloop %}
 
-### 📁 Project Structure
+### Project Structure
 
 ```text
 tutorloop/

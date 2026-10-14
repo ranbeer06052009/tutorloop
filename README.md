@@ -7,6 +7,7 @@
 [![Framework: Next.js](https://img.shields.io/badge/Framework-Next.js%2016-black)](https://nextjs.org/)
 [![Model: Google Gemma 2](https://img.shields.io/badge/Model-Google%20Gemma%202-purple)](https://ai.google.dev/gemma)
 [![Database: SQLite](https://img.shields.io/badge/Database-SQLite%20(Local)-blue)](https://sqlite.org/)
+[![Deployed on: Render](https://img.shields.io/badge/Deployed%20on-Render-46E3B7?logo=render&logoColor=white)](https://tutorloop.onrender.com/)
 [![Privacy: FERPA Compliant](https://img.shields.io/badge/Privacy-100%25%20Local%20(Zero%20Cloud)-emerald)](https://studentprivacy.ed.gov/)
 
 ---
