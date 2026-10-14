@@ -107,3 +107,4 @@ cover_image: https://your-cover-image-url.png (optional)
   - Screenshot 2: The printable invoice receipt modal.
 - [ ] Publish post with tags: `devchallenge, hacktoberfest, gemma, sidehustle, localai`.
 - [ ] Submit link to the official DEV challenge thread.
+

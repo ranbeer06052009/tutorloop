@@ -1,85 +1,179 @@
-import Link from "next/link";
+"use client";
 
-export default function HomePage() {
+import React, { useState, useEffect, useCallback } from "react";
+import { Navbar } from "@/components/Navbar";
+import { SessionCloser } from "@/components/SessionCloser";
+import { DashboardView } from "@/components/DashboardView";
+import { StudentsView } from "@/components/StudentsView";
+import { SettingsView } from "@/components/SettingsView";
+import { Sparkles, ShieldCheck, Heart } from "lucide-react";
+
+export default function Home() {
+  const [activeTab, setActiveTab] = useState<"closer" | "dashboard" | "students" | "settings">("closer");
+  const [students, setStudents] = useState<any[]>([]);
+  const [sessions, setSessions] = useState<any[]>([]);
+  const [settings, setSettings] = useState<any>({
+    tutor_name: "Jordan Lee",
+    tutor_email: "jordan.tutors@example.com",
+    tutor_phone: "+1 (555) 789-0123",
+    payment_methods: "Venmo: @jordan-tutors | Zelle: jordan.tutors@example.com",
+    currency_symbol: "$",
+    ollama_url: "http://localhost:11434",
+    ollama_model: "gemma2:2b",
+  });
+  const [ollamaStatus, setOllamaStatus] = useState({
+    connected: false,
+    configuredModel: "gemma2:2b",
+    hasConfiguredModel: false,
+    models: [] as string[],
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchStudents = useCallback(async () => {
+    try {
+      const res = await fetch("/api/students");
+      const data = await res.json();
+      if (data.success) {
+        setStudents(data.students);
+      }
+    } catch (err) {
+      console.error("Error fetching students:", err);
+    }
+  }, []);
+
+  const fetchSessions = useCallback(async () => {
+    try {
+      const res = await fetch("/api/sessions");
+      const data = await res.json();
+      if (data.success) {
+        setSessions(data.sessions);
+      }
+    } catch (err) {
+      console.error("Error fetching sessions:", err);
+    }
+  }, []);
+
+  const fetchSettings = useCallback(async () => {
+    try {
+      const res = await fetch("/api/settings");
+      const data = await res.json();
+      if (data.success && data.settings) {
+        setSettings(data.settings);
+      }
+    } catch (err) {
+      console.error("Error fetching settings:", err);
+    }
+  }, []);
+
+  const fetchOllamaStatus = useCallback(async () => {
+    try {
+      const res = await fetch("/api/ollama/status");
+      const data = await res.json();
+      setOllamaStatus({
+        connected: data.connected,
+        configuredModel: data.configuredModel,
+        hasConfiguredModel: data.hasConfiguredModel,
+        models: data.models || [],
+      });
+    } catch (err) {
+      console.error("Error checking ollama:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    const loadAll = async () => {
+      setIsLoading(true);
+      await Promise.all([
+        fetchStudents(),
+        fetchSessions(),
+        fetchSettings(),
+        fetchOllamaStatus(),
+      ]);
+      setIsLoading(false);
+    };
+    loadAll();
+  }, [fetchStudents, fetchSessions, fetchSettings, fetchOllamaStatus]);
+
+  const handleSelectStudentForCloser = (studentId: number) => {
+    setActiveTab("closer");
+  };
+
   return (
-    <main className="mx-auto min-h-screen max-w-5xl px-6 py-10">
-      <header className="flex items-center justify-between">
-        <p className="font-serif text-2xl tracking-tight">TutorLoop</p>
-        <Link
-          href="/desk"
-          className="rounded-full bg-moss px-5 py-2 text-sm font-semibold text-paper hover:bg-moss-deep"
-        >
-          Open the desk
-        </Link>
-      </header>
+    <div className="min-h-screen bg-slate-100/60 flex flex-col font-sans text-slate-800">
+      <Navbar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        ollamaStatus={ollamaStatus}
+      />
 
-      <section className="mt-16 grid gap-10 md:grid-cols-[1.2fr_0.8fr] md:items-end">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-moss">
-            Side hustle for tutors
-          </p>
-          <h1 className="mt-4 font-serif text-5xl leading-[1.05] text-ink md:text-6xl">
-            Close the session. Text the parent. Send the invoice.
-          </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-ink/75">
-            Student tutors already get paid for the hour. They lose the next twenty minutes
-            writing a recap, inventing homework, and chasing money. TutorLoop runs an
-            open-weight Gemma model on those messy notes so client names never have to
-            leave a laptop — and still keeps a proper ledger on MongoDB Atlas.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/desk"
-              className="rounded-full bg-ink px-6 py-3 text-sm font-semibold text-paper"
-            >
-              Run a session close
-            </Link>
-            <a
-              href="https://dev.to/challenges/hacktoberfest-week2-2026-10-12"
-              className="rounded-full border border-ink/20 px-6 py-3 text-sm font-semibold"
-            >
-              HF26 Week 2
-            </a>
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center min-h-[350px] space-y-3">
+            <div className="h-8 w-8 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin" />
+            <p className="text-xs text-slate-500 font-medium">Loading TutorLoop local workspace...</p>
+          </div>
+        ) : (
+          <>
+            {activeTab === "closer" && (
+              <SessionCloser
+                students={students}
+                onSessionSaved={() => {
+                  fetchSessions();
+                  fetchStudents();
+                }}
+                currencySymbol={settings.currency_symbol || "$"}
+              />
+            )}
+
+            {activeTab === "dashboard" && (
+              <DashboardView
+                sessions={sessions}
+                currencySymbol={settings.currency_symbol || "$"}
+                onRefresh={() => {
+                  fetchSessions();
+                  fetchStudents();
+                }}
+                onOpenCloser={() => setActiveTab("closer")}
+              />
+            )}
+
+            {activeTab === "students" && (
+              <StudentsView
+                students={students}
+                currencySymbol={settings.currency_symbol || "$"}
+                onRefresh={fetchStudents}
+                onSelectStudentForCloser={handleSelectStudentForCloser}
+              />
+            )}
+
+            {activeTab === "settings" && (
+              <SettingsView
+                settings={settings}
+                onRefreshSettings={fetchSettings}
+                ollamaStatus={ollamaStatus}
+                onRefreshOllama={fetchOllamaStatus}
+              />
+            )}
+          </>
+        )}
+      </main>
+
+      <footer className="border-t border-slate-200 bg-white/80 py-4 px-4 text-center text-xs text-slate-500">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 font-medium">
+            <span>TutorLoop</span>
+            <span>•</span>
+            <span className="text-indigo-600 font-semibold">Hacktoberfest 2026: Side Hustle Challenge</span>
+          </div>
+          <div className="flex items-center gap-3 text-[11px] text-slate-400">
+            <span>Open weights with Google Gemma 2</span>
+            <span>•</span>
+            <span>Local SQLite</span>
+            <span>•</span>
+            <span>Preserved with DevRelay</span>
           </div>
         </div>
-
-        <aside className="rounded-3xl border border-rule bg-paper/80 p-6 shadow-[0_20px_50px_rgba(28,23,18,0.08)]">
-          <div className="flex items-start justify-between">
-            <p className="text-xs uppercase tracking-[0.18em] text-ink/50">Invoice 014</p>
-            <span className="stamp">Due</span>
-          </div>
-          <p className="mt-6 font-serif text-3xl">Aarav · Physics</p>
-          <p className="mt-2 text-sm text-ink/60">1.5 hours · quadratic graphs</p>
-          <hr className="my-5 border-rule" />
-          <p className="text-sm leading-relaxed text-ink/80">
-            Hi Meera — Aarav is solid on plotting. Today we hunted sign errors in
-            completing the square. Homework is two textbook problems, 20 minutes.
-          </p>
-          <p className="mt-6 font-serif text-4xl text-moss">₹750</p>
-        </aside>
-      </section>
-
-      <section className="mt-20 grid gap-6 md:grid-cols-3">
-        {[
-          {
-            title: "Gemma, not a mystery API",
-            body: "Ollama locally, or hosted Gemma on Render. Swap the weights without rewriting the product.",
-          },
-          {
-            title: "A ledger parents can trust",
-            body: "Every recap, homework list, and rupee amount lands in MongoDB Atlas — queryable, not a chat log.",
-          },
-          {
-            title: "Priced like a side hustle",
-            body: "Closed models bill per parent message. Your own model is electricity. That is why this business works.",
-          },
-        ].map((card) => (
-          <article key={card.title} className="rounded-2xl border border-rule bg-paper/70 p-5">
-            <h2 className="font-serif text-xl">{card.title}</h2>
-            <p className="mt-3 text-sm leading-relaxed text-ink/70">{card.body}</p>
-          </article>
-        ))}
-      </section>
-    </main>
+      </footer>
+    </div>
   );
 }

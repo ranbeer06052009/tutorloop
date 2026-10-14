@@ -83,7 +83,7 @@ To test whether someone would actually use and pay for this, I handed TutorLoop 
 
 ## 🔗 Try It Out & Source Code
 
-- **GitHub Repository:** [TutorLoop on GitHub](https://github.com/your-username/tutorloop)
+- **GitHub Repository:** [TutorLoop on GitHub](https://github.com/ranbeer06052009/tutorloop)
 - **Stack:** Next.js 16 + Google Gemma 2 + SQLite
 
 *Built with open-source tools for Hacktoberfest 2026.*

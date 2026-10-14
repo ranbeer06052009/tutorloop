@@ -1,8 +1,18 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Pages talk to Mongo and Gemma at request time; skip static prerender traps on Render.
-  serverExternalPackages: ["mongoose"],
+  /* config options here */
+  cacheComponents: true,
+  partialPrefetching: true,
+  serverExternalPackages: ["better-sqlite3"],
+  turbopack: {
+    rules: {
+      "*.css": {
+        loaders: ["@tailwindcss/turbopack"],
+        as: "*.css",
+      },
+    },
+  },
 };
 
 export default nextConfig;

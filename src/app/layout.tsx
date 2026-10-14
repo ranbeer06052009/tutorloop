@@ -1,29 +1,34 @@
 import type { Metadata } from "next";
-import { Figtree, Fraunces } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const figtree = Figtree({
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  variable: "--font-figtree",
 });
 
-const fraunces = Fraunces({
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
-  variable: "--font-fraunces",
 });
 
 export const metadata: Metadata = {
-  title: "TutorLoop — close the session, get paid",
+  title: "TutorLoop — Local-First Session Closer for Student Tutors",
   description:
-    "Local Gemma turns messy tutoring notes into a parent recap, homework, and invoice. MongoDB Atlas stores the ledger. Render hosts the desk.",
+    "Turn post-class notes into a parent recap, student homework, and instant invoice using local open-weight Gemma models with 100% offline student privacy.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en">
-      <body className={`${figtree.variable} ${fraunces.variable} antialiased ledger-bg`}>
-        {children}
-      </body>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col bg-slate-50">{children}</body>
     </html>
   );
 }
