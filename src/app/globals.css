@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f3eadc;
+  --ink: #1c1712;
+  --moss: #2c5a4c;
+  --moss-deep: #1e3d34;
+  --stamp: #b5473a;
+  --gold: #c9a15b;
+  --rule: #d9cbb6;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-moss: var(--moss);
+  --color-moss-deep: var(--moss-deep);
+  --color-stamp: var(--stamp);
+  --color-gold: var(--gold);
+  --color-rule: var(--rule);
+  --font-sans: var(--font-figtree);
+  --font-serif: var(--font-fraunces);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-figtree), system-ui, sans-serif;
+}
+
+.ledger-bg {
+  background-image:
+    linear-gradient(to right, rgba(28, 23, 18, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(28, 23, 18, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.stamp {
+  border: 2px solid var(--stamp);
+  color: var(--stamp);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.68rem;
+  font-weight: 700;
+  transform: rotate(-8deg);
+  padding: 0.2rem 0.45rem;
+}
+
+@media print {
+  nav,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+  }
+}
