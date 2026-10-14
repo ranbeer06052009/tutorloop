@@ -1,6 +1,6 @@
 # TutorLoop: A Local-First, FERPA-Compliant AI Session Closer for Student Tutors
 
-[#hf26challenge](https://dev.to/t/hf26challenge) [#devchallenge](https://dev.to/t/devchallenge) [#ai](https://dev.to/t/ai) [#opensource](https://dev.to/t/opensource)
+[#hf26challenge](https://dev.to/t/hf26challenge) [#devchallenge](https://dev.to/t/devchallenge) [#render](https://dev.to/t/render) [#ai](https://dev.to/t/ai) [#opensource](https://dev.to/t/opensource)
 
 Hacktoberfest Open-Source AI Challenge Week 2: Side Hustle Submission 💸
 
@@ -122,6 +122,12 @@ The system prompt enforces strict role conditioning:
 - Built with **Next.js 16** (Turbopack) and **Tailwind CSS**.
 - Dedicated `@media print` rules strip all web controls, buttons, and navbars when viewing an invoice, producing crisp, bank-ready PDF receipts in one click.
 
+### 5. Production Cloud Deployment on Render (Infrastructure-as-Code)
+To give hackathon judges an immediate, interactive playground without forcing them to configure a local environment, TutorLoop is deployed as a production Web Service on [Render](https://render.com):
+- **Declarative Infrastructure with `render.yaml`:** Entire service configuration, build pipelines (`npm install && npm run build`), start triggers (`npm start`), and environment parameters are codified as a version-controlled Render Blueprint.
+- **Continuous Git-Driven Deployment:** Directly wired to the GitHub repository (`ranbeer06052009/tutorloop`). Pushing commits automatically triggers optimized Turbopack production builds with zero-downtime cutover.
+- **Interactive Sandbox Resilience:** Solved the classic problem of deploying a local-first SQLite application to an ephemeral cloud container. On boot, TutorLoop detects a clean instance and auto-seeds verified demo students, hourly rates, and past session histories. Judges visiting [https://tutorloop.onrender.com/](https://tutorloop.onrender.com/) can test live session generation, edit notes, and print receipts without manual onboarding.
+
 ---
 
 ## 🔒 Why Does Open Innovation Matter?
@@ -129,7 +135,7 @@ The system prompt enforces strict role conditioning:
 Open innovation is not just an ideological choice for TutorLoop—**it is the only legally, ethically, and economically viable architecture**:
 
 1. **Student Confidentiality (FERPA / COPPA Compliance):** Minors have legal protections over their educational records. Sending a child's name, school, grades, and cognitive struggles to third-party cloud servers exposes tutors to compliance and trust liabilities. Open weights ensure student data remains strictly on the tutor's device.
-2. **Economic Viability for the \$30/hr Hustle:** Student tutors cannot afford \$20–\$30/month SaaS subscriptions that eat their profit margins. Open-weight Gemma running locally costs **\$0.00 forever**.
+2. **Economic Viability for the $30/hr Hustle:** Student tutors cannot afford $20–$30/month SaaS subscriptions that eat their profit margins. Open-weight Gemma running locally costs **$0.00 forever**.
 3. **100% Offline Resilience:** University libraries, dorm basements, and coffee shops frequently have spotty Wi-Fi or captive portals. TutorLoop works completely offline.
 4. **Permanent Availability:** Proprietary APIs change prices, alter guardrails, or deprecate models without notice. Open-weight models like Gemma 2 remain permanently available and under the tutor's control.
 
@@ -143,7 +149,7 @@ This entire application—from architecture conception, Next.js 16 and SQLite se
 - **Architectural Pivot:** Refocused the project away from generic freelancer tools toward student tutors—a high-urgency, legally privacy-sensitive side hustle where open innovation has an unassailable advantage.
 - **Local Gemma Pipeline:** Engineered the structured JSON prompt for Gemma 2 via Ollama with robust schema validation and zero-config fallback.
 - **SQLite Concurrency & Print CSS:** Built the local database with WAL mode and crafted the `@media print` invoice layout.
-- **Repository Optimization:** Flattened and unified the repository into a clean root project, verified clean compilation with Turbopack, and automated Render blueprint configuration.
+- **Repository Optimization & Render Infrastructure:** Flattened and unified the repository into a clean root project, verified clean compilation with Turbopack, and authored the `render.yaml` blueprint for 1-click Render web service deployment.
 
 ---
 
@@ -172,8 +178,8 @@ During the challenge sprint, I tested TutorLoop with **David K.**, a 2nd-year Co
 ## 🏆 Prize Categories
 
 - **Primary Track:** Hacktoberfest Open-Source AI Challenge — Week 2: Side Hustle
-- **Partner / Sponsor Tracks:**
-  - Best Use of Google Gemma (Open Weights via Ollama)
-  - Local-First Open-Source AI Innovation
+- **Sponsor Track — Best Use of Render:** Automated Git-backed Web Service with Infrastructure-as-Code via `render.yaml` Blueprint, continuous deployment, and interactive sandbox architecture.
+- **Sponsor Track — Best Use of Google Gemma:** Quantized Gemma 2 Open Weights via Ollama with pedagogical prompt constraints.
+- **Editorial Track — DEV Writing Challenge ($100 Prize):** Deep technical substance, real user validation, and practical open-source AI enablement.
 
 *Built with ❤️ during Hacktoberfest 2026.*
